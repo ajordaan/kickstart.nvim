@@ -22,7 +22,7 @@
 
 What is Kickstart?
 
-  Kickstart.nvim is *not* a distribution.
+  Kickswart.nvim is *not* a distribution.
 
   Kickstart.nvim is a starting point for your own configuration.
     The goal is that you can read every line of code, top-to-bottom, understand
@@ -51,7 +51,7 @@ Kickstart Guide:
       - Tutor
       - <enter key>
 
-    (If you already know the Neovim basics, you can skip this step.)
+    (If you 'already' know the Neovim basics, you can skip this step.)
 
   Once you've completed that, you can continue working through **AND READING** the rest
   of the kickstart init.lua.
@@ -83,6 +83,7 @@ I hope you enjoy your Neovim journey,
 
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
+--
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -102,7 +103,12 @@ vim.g.have_nerd_font = false
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
+
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -150,6 +156,7 @@ vim.opt.inccommand = 'split'
 
 -- Show which line your cursor is on
 vim.opt.cursorline = true
+vim.opt.cursorcolumn = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
@@ -160,6 +167,45 @@ vim.opt.scrolloff = 10
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+-- Remaps
+
+-- Move selected text around
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
+-- Keep cursor centered
+
+vim.keymap.set('n', 'J', 'mzJ`z')
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
+
+-- Copy paste maps
+
+vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
+vim.keymap.set('n', '<leader>Y', [["+y$]])
+vim.keymap.set({ 'n', 'v' }, '<leader>p', [["0p]])
+vim.keymap.set({ 'n', 'v' }, '<leader>P', [["0P]])
+vim.keymap.set({ 'n', 'v' }, '<leader><leader>p', [["+p]])
+vim.keymap.set({ 'n', 'v' }, '<leader><leader>P', [["+P]])
+vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]]) -- delete to void register
+
+-- oil
+vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+
+-- Copy file path to system clipboard
+vim.keymap.set('n', '<C-/>', [[:let @+=expand('%:p:~:.')<CR>]], { noremap = true, silent = true })
+
+-- Toggle relative line numbers
+vim.keymap.set('n', '<leader><leader>l', ':set relativenumber!<CR>', { noremap = true, silent = true })
+-- Tab between recent buffers
+vim.keymap.set('n', '<Tab>', ':b#<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader><tab>', ':tabnext<CR>', { noremap = true, silent = true })
+
+vim.keymap.set({ 'n', 'v' }, 'H', '^', { silent = true })
+vim.keymap.set({ 'n', 'v' }, 'L', '$', { silent = true })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
@@ -227,6 +273,20 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  'tpope/vim-surround',
+  'AndrewRadev/splitjoin.vim',
+  'f-person/git-blame.nvim',
+  'tpope/vim-repeat',
+  'mg979/vim-visual-multi',
+  'wellle/targets.vim',
+  'andymass/vim-matchup',
+  'michaeljsmith/vim-indent-object',
+  'onemanstartup/vim-slim',
+  'tpope/vim-rails',
+  'tpope/vim-endwise',
+  'kana/vim-textobj-user',
+  'justinmk/vim-sneak',
+  'sQVe/sort.nvim',
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -239,6 +299,8 @@ require('lazy').setup({
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
+
+  { 'nvim-tree/nvim-web-devicons', opts = {} },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -374,8 +436,10 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
+      vim.keymap.set('n', '<leader>sy', builtin.registers, { desc = '[S]earch Registers' })
+      vim.keymap.set('n', '<leader>sc', builtin.git_status, { desc = '[S]earch [C]hanged git files' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>sb', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -746,47 +810,8 @@ require('lazy').setup({
       vim.cmd.hi 'Comment gui=none'
     end,
   },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
-
-  { -- Collection of various small independent plugins/modules
-    'echasnovski/mini.nvim',
-    config = function()
-      -- Better Around/Inside textobjects
-      --
-      -- Examples:
-      --  - va)  - [V]isually select [A]round [)]paren
-      --  - yinq - [Y]ank [I]nside [N]ext [']quote
-      --  - ci'  - [C]hange [I]nside [']quote
-      require('mini.ai').setup { n_lines = 500 }
-
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
-
-      -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
-    end,
-  },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -836,7 +861,7 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
