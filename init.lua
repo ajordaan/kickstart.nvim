@@ -284,6 +284,7 @@ require('lazy').setup({
   'onemanstartup/vim-slim',
   'tpope/vim-rails',
   'tpope/vim-endwise',
+  'tpope/vim-fugitive',
   'kana/vim-textobj-user',
   'justinmk/vim-sneak',
   'sQVe/sort.nvim',
