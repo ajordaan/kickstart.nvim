@@ -192,6 +192,8 @@ vim.keymap.set({ 'n', 'v' }, '<leader><leader>p', [["+p]])
 vim.keymap.set({ 'n', 'v' }, '<leader><leader>P', [["+P]])
 vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]]) -- delete to void register
 
+vim.keymap.set({ 'n' }, '<leader>rf', [[<cmd> !rubocop -a %<CR>]], { noremap = true, silent = true }) -- run rubocop on current buffer
+
 -- oil
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 
@@ -679,12 +681,12 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        ruby = { 'rubocop' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
-        --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
+        javascript = { { 'prettierd', 'prettier' } },
       },
     },
   },
@@ -853,9 +855,9 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.lint',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
