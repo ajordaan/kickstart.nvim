@@ -8,7 +8,7 @@ return {
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
         json = { 'jsonlint' }, -- npm install jsonlint -g
-        ruby = { 'rubocop' },
+        -- ruby = { 'rubocop' }, -- uncomment if not using an LSP
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
