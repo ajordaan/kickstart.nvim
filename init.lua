@@ -192,7 +192,7 @@ vim.keymap.set({ 'n', 'v' }, '<leader><leader>p', [["+p]])
 vim.keymap.set({ 'n', 'v' }, '<leader><leader>P', [["+P]])
 vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]]) -- delete to void register
 
-vim.keymap.set({ 'n' }, '<leader>rf', [[<cmd> !rubocop -a %<CR>]], { noremap = true, silent = true }) -- run rubocop on current buffer
+vim.keymap.set({ 'n' }, '<leader>rf', [[<cmd> !rubocop -A %<CR>]], { noremap = true, silent = true }) -- run rubocop on current buffer
 
 -- oil
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
@@ -805,7 +805,7 @@ require('lazy').setup({
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
+          ['<CR>'] = cmp.mapping.confirm { select = true },
 
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
